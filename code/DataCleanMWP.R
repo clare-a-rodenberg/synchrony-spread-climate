@@ -69,3 +69,53 @@ ppt.cln<-cleandat(in.data.ppt,time,clev=5)$cdat
 #plot(time,ppt.cln[1,],type="l") 
 snow_depth.cln<-cleandat(in.data.snow_depth,time,clev=5)$cdat
 #plot(time,snow_depth.cln[1,],type="l") 
+
+
+##Lines 80-120 are the same data processes as those that were applied to create time series for spread rate and 
+#the 4 climate variables, but are for the climate index data. The climate index datasets must be read in and joined
+#to the original input dataframe in.data.t  Note that the climate index data are only relevant for those ecoregions for 
+#which we identified syncrhony in spread was explained by a climate variable (the MWS, MWP and SUP ecoregions) as we were 
+#interested in understanding whether teleconnections explained synchrony in the climate variable that drove synchrony in 
+#spread. Therefore, **these lines are only relevant to the MWS, MWP, and SUP ecoregions.**
+
+#read in climate index data
+in.data.climate.indices <- read.csv("data/clim.indices.mwp.spring.csv", header = TRUE, sep = ",")
+
+#join main input data (in.data.t) to climate index data by YEAR
+in.data.joined <- left_join(in.data.t, in.data.climate.indices, by = c("year_t" = "year"), keep = TRUE)
+#omit any NA values from the joined dataset
+in.data.joined <- na.omit(in.data.joined)
+#rename dataset 
+in.data.t <- in.data.joined
+
+# PDO time series for MWP
+in.data.pdo <- in.data.t[,c("bearing2", "year_t", "pdo.spring.mean")]
+in.data.pdo <- reshape(in.data.pdo, idvar = c("bearing2"), timevar = "year_t", direction = "wide")
+in.data.pdo <- in.data.pdo[, -c(1)]
+# remove any rows with NA & convert to matrix
+in.data.pdo <- in.data.pdo[complete.cases(in.data.pdo),]
+in.data.pdo <- as.matrix(in.data.pdo)
+
+# ENSO (MEI index) time series for MWP
+in.data.enso <- in.data.t[,c("bearing2", "year_t", "enso.spring.mean")]
+in.data.enso <- reshape(in.data.enso, idvar = c("bearing2"), timevar = "year_t", direction = "wide")
+in.data.enso <- in.data.enso[, -c(1)]
+# remove any rows with NA & convert to matrix
+in.data.enso <- in.data.enso[complete.cases(in.data.enso),]
+in.data.enso <- as.matrix(in.data.enso)
+
+# NAO time series for MWP
+in.data.nao <- in.data.t[,c("bearing2", "year_t", "nao.spring.mean")]
+in.data.nao <- reshape(in.data.nao, idvar = c("bearing2"), timevar = "year_t", direction = "wide")
+in.data.nao <- in.data.nao[, -c(1)]
+# remove any rows with NA & convert to matrix
+in.data.nao <- in.data.nao[complete.cases(in.data.nao),]
+in.data.nao <- as.matrix(in.data.nao)
+
+#clean climate index data
+nao.cln<-cleandat(in.data.nao,time,clev=5)$cdat
+#plot(time,nao.cln[1,],type="l") 
+pdo.cln<-cleandat(in.data.pdo,time,clev=5)$cdat
+#plot(time,pdo.cln[1,],type="l") 
+enso.cln<-cleandat(in.data.enso,time,clev=5)$cdat
+#plot(time,pdo.cln[1,],type="l") 
