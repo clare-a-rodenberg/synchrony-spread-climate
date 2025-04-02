@@ -25,6 +25,12 @@ setwd(work_dir)
 #variable_name.cln)
 #DataAnalyses contains code to run all wavelet analyses supporting this manuscript and produces the individual
 #panels of each figure
+
+#Run the climate index compilation code. This code creates compiled datasets for each climate index by season 
+#and ecoregion. The code only compiles a climate index dataset for the ecoregions where we found that synchrony is spread was related to synchrony in a climate variable. 
+#Those ecoregions are the MWS, MWP, and SUP.
+system.time(source("ClimateIndexManipulation.R"))
+
 #When running the below scripts, only run one ecoregion at a time, clearing the workspace in between ecoregions. 
 
 #Southeastern USA Plains (SUP) ecoregion

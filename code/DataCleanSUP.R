@@ -80,9 +80,9 @@ snow_depth.cln<-cleandat(in.data.snow_depth,time,clev=5)$cdat
 ##Lines 87-130 are the same data processes as those that were applied to create time series for spread rate and 
 #the 4 climate variables, but are for the climate index data. The climate index datasets must be read in and joined
 #to the original input dataframe in.data.t  Note that the climate index data are only relevant for those ecoregions for 
-#which we identified syncrhony in spread was explained by a climate variable (the MWS and SUP ecoregions) as we were 
+#which we identified syncrhony in spread was explained by a climate variable (the MWS, MWP, and SUP ecoregions) as we were 
 #interested in understanding whether teleconnections explained synchrony in the climate variable that drove synchrony in 
-#spread. Therefore, **these lines are only relevant to the MWS and SUP ecoregions.**
+#spread. Therefore, **these lines are only relevant to the MWS, MWP, and SUP ecoregions.**
 
 #read in climate index data
 in.data.climate.indices <- read.csv("data/clim.indices.sup.spring.csv", header = TRUE, sep = ",")
