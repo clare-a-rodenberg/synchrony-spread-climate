@@ -4,7 +4,7 @@
 
 #Read in combined spread rate + associated climate variable data (tmean, tmin, ppt, and snow_depth) for the 
 #Southern USA Plains (SUP) ecoregion
-in.data.t <- read.csv("data/sup_spread_climate.csv", header = TRUE, sep = ",")
+in.data.t <- read.csv(here("data", "sup_spread_climate.csv"), header = TRUE, sep = ",")
 
 #exclude time series <20 years in length because wavelet-based approaches require relatively long time series
 in.data.t <- setDT(in.data.t)[, grp := cumsum(c(0, diff(year_t)) > 1), by = bearing2
@@ -85,7 +85,7 @@ snow_depth.cln<-cleandat(in.data.snow_depth,time,clev=5)$cdat
 #spread. Therefore, **these lines are only relevant to the MWS, MWP, and SUP ecoregions.**
 
 #read in climate index data
-in.data.climate.indices <- read.csv("data/clim.indices.sup.spring.csv", header = TRUE, sep = ",")
+in.data.climate.indices <- read.csv(here("data", "clim.indices.sup.spring.csv"), header = TRUE, sep = ",")
 
 #join main input data (in.data.t) to climate index data by YEAR
 in.data.joined <- left_join(in.data.t, in.data.climate.indices, by = c("year_t" = "year"), keep = TRUE)

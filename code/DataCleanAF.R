@@ -4,7 +4,7 @@
 
 #Read in combined spread rate + associated climate variable data (tmean, tmin, ppt, and snow_depth) for the 
 #Appalachian Forest (AF) ecoregion
-in.data.t <- read.csv("data/af_spread_climate.csv", header = TRUE, sep = ",")
+in.data.t <- read.csv(here("data", "af_spread_climate.csv"), header = TRUE, sep = ",")
 
 #exclude time series <20 years in length because wavelet-based approaches require relatively long time series
 in.data.t <- setDT(in.data.t)[, grp := cumsum(c(0, diff(year_t)) > 1), by = bearing2

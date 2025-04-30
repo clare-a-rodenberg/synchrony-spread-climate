@@ -1,6 +1,6 @@
 #Calculate wavelet mean field (WMF) for each variable
 #check arguments in help file if needed
-#help(wmf) 
+# help(wmf) 
 #take the WMF
 wmf.spread<-wmf(spread.cln, time) 
 wmf.tmean<-wmf(tmean.cln, time) 
@@ -12,24 +12,25 @@ wmf.pdo<-wmf(pdo.cln, time)
 wmf.enso<-wmf(enso.cln, time)
 
 #Plot WMF for spread rate, creating Figure 2a 
-png("results/Fig2a.png")
+png(here("results", "figures", "Fig2a.png"))
 plotmag(wmf.spread)
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
+
 #Plot WMF for the four climate variables, creating Figure 3a,f,k,p 
-png("results/Fig3a.png")
+png(here("results", "figures", "Fig3a.png"))
 plotmag(wmf.tmean)
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
-png("results/Fig3f.png")
+png(here("results", "figures", "Fig3f.png"))
 plotmag(wmf.ppt)
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
-png("results/Fig3k.png")
+png(here("results", "figures", "Fig3k.png"))
 plotmag(wmf.tmin)
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
-png("results/Fig3p.png")
+png(here("results", "figures", "Fig3p.png"))
 plotmag(wmf.snow_depth)
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
@@ -40,7 +41,7 @@ dev.off()
 
 #Calculate wavelet phasor mean field (WPMF) for each variable using the sig. thresh. of P<0.001
 #check arguments in help file if needed
-#help(wpmf)
+# help(wpmf)
 wpmf.spread<-wpmf(spread.cln, time, sigmethod = "fft")
 wpmf.tmean<-wpmf(tmean.cln, time, sigmethod = "fft")
 wpmf.tmin<-wpmf(tmin.cln, time, sigmethod = "fft")
@@ -48,7 +49,7 @@ wpmf.ppt<-wpmf(ppt.cln, time, sigmethod = "fft")
 wpmf.snow_depth<-wpmf(snow_depth.cln, time, sigmethod = "fft")
 
 #Plot WPMF for spread rate, creating Figure 2f
-png("results/Fig2f.png")
+png(here("results", "figures", "Fig2f.png"))
 plotmag(wpmf.spread, sigthresh = 0.999)
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
@@ -61,7 +62,7 @@ dev.off()
 
 #SPATIAL COHERENCE#
 #remind ourselves of the arguments to this function
-#help(coh)
+# help(coh)
 
 #Set short and long time-scales
 #short timescale band, 2-4 year period lengths. the short timescale band is the same for all ecoregions.
@@ -90,29 +91,33 @@ spcoh.spread.snow_depth<-bandtest(spcoh.spread.snow_depth, blong)
 #Retrieves p-values and mean phase for spatial coherence - note the climate variables that have significant 
 #spatial coherence with spread rate, these climate variables will be used in further analyses
 get_bandp(spcoh.spread.tmean)
+saveRDS(spcoh.spread.tmean,file=here("results", "spcoh_band", "sup", "spread_tmean_sup.rds"))
 get_bandp(spcoh.spread.tmin)
+saveRDS(spcoh.spread.tmin,file=here("results", "spcoh_band","sup",  "spread_tmin_sup.rds"))
 get_bandp(spcoh.spread.ppt)
+saveRDS(spcoh.spread.ppt,file=here("results", "spcoh_band", "sup", "spread_ppt_sup.rds"))
 get_bandp(spcoh.spread.snow_depth)
+saveRDS(spcoh.spread.snow_depth,file=here("results", "spcoh_band", "sup", "spread_snow-depth_sup.rds"))
 
 #This is essentially a visual depiction of output from the 'get_bandp' function
-dev.off()
-plotmag(spcoh.spread.tmean)
-plotmag(spcoh.spread.tmin)
-plotmag(spcoh.spread.ppt)
-plotmag(spcoh.spread.snow_depth)
+# dev.off()
+# plotmag(spcoh.spread.tmean)
+# plotmag(spcoh.spread.tmin)
+# plotmag(spcoh.spread.ppt)
+# plotmag(spcoh.spread.snow_depth)
 
 #These plots indicate phase differences - information on the temporal lag between oscillations of two variables.
-#For information purposes only. 
-png("results/phase_dif_spread-tmean_sup.png")
+#For information purposes only. Figures not in manuscript. 
+png(here("results", "phase_dif", "sup", "spread-tmean_sup.png"))
 plotphase(spcoh.spread.tmean)
 dev.off()
-png("results/phase_dif_spread-tmin_sup.png")
+png(here("results", "phase_dif", "sup", "spread-tmin_sup.png"))
 plotphase(spcoh.spread.tmin)
 dev.off()
-png("results/phase_dif_spread-ppt_sup.png")
+png(here("results", "phase_dif", "sup", "spread-ppt_sup.png"))
 plotphase(spcoh.spread.ppt)
 dev.off()
-png("results/phase_dif_spread-snow_depth_sup.png")
+png(here("results", "phase_dif", "sup", "spread-snow_depth_sup.png"))
 plotphase(spcoh.spread.snow_depth)
 dev.off()
 
@@ -128,15 +133,15 @@ wlm.sup<-wlm(dlist.sup, time, resp=2, pred=1, norm="powall") #invoke the wavelet
 
 #Determine the average synchrony explained by timescale (short and long), calculate cross-terms
 se.sup<-syncexpl(wlm.sup)
-#print(se.sup)
+# print(se.sup)
 se_short.sup<-se.sup[se.sup$timescales>=bshort[1]&se.sup$timescales<=bshort[2],]
 round(100*colMeans(se_short.sup[,3:6])/mean(se_short.sup$sync),4)
-saveRDS(se_short.sup,file="results/se_short_sup.rds")
+saveRDS(se_short.sup,file=here("results", "synch_expl", "sup", "se_short_sup.rds"))
 se_long.sup<-se.sup[se.sup$timescales>=blong[1]&se.sup$timescales<=blong[2],]
 round(100*colMeans(se_long.sup[,3:6])/mean(se_long.sup$sync),4)
-saveRDS(se_short.sup,file="results/se_long_sup.rds")
+saveRDS(se_short.sup,file=here("results", "synch_expl", "sup", "se_long_sup.rds"))
 
-#Extract information from the WMFs for spread (created on line 5) and the model prediction (created on line 148) to 
+#Extract information from the WMFs for spread (created on line 5) and the model prediction (created on lines 147-48) to 
 #create a visual representation of the WMFs for observed (Figure 4a) and predicted (Figure 4b) synchrony in spread rate 
 #except timescale-specifc synchrony is averaged across all years, representing the mean squared synchrony
 wmf.values <- Mod(get_values(wmf.spread))
@@ -153,18 +158,18 @@ wmf.df$pred.values <- pred.values
 
 #Visually compare predicted synchrony to actual synchrony in spread rate
 #Figure 4 panels a,b
-png("results/Fig4a.png")
+png(here("results", "figures", "Fig4a.png"))
 plotmag(wmf.spread) #plot the WMF for spread rate
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
-png("results/Fig4b.png")
+png(here("results", "figures", "Fig4b.png"))
 plotmag(preds.sup) #plot the predicted WMF
 segments(x0=1995,x1=2018,y0=log2(4),y1=log2(4),col='white',lty=1,lwd=5)
 dev.off()
 
 #Figure 4 panel c 
 test.data.long <- melt(wmf.df, id="wmf.timescales")
-png("results/Fig4c.png")
+png(here("results", "figures", "Fig4c.png"))
 ggplot(data=test.data.long, aes(x=wmf.timescales, y=value, colour=variable)) +
   geom_line(linewidth=1) +
   labs(x = "Timescale (years)", y = "Time-averaged \n synchrony") +
@@ -185,18 +190,33 @@ dev.off()
 spcoh.ppt.nao<-coh(ppt.cln, nao.cln, time, norm="powall", sigmethod="fftsurrog12", nrand=2000)
 spcoh.ppt.pdo<-coh(ppt.cln, pdo.cln, time, norm="powall", sigmethod="fftsurrog12", nrand=2000)
 spcoh.ppt.enso<-coh(ppt.cln, enso.cln, time, norm="powall", sigmethod="fftsurrog12", nrand=2000)
+
 ##
 spcoh.ppt.nao<-bandtest(spcoh.ppt.nao, bshort)
 spcoh.ppt.nao<-bandtest(spcoh.ppt.nao, blong)
-plotmag(spcoh.ppt.nao)
+spcoh.ppt.nao.band <- get_bandp(spcoh.ppt.nao)
+saveRDS(spcoh.ppt.nao.band,file=here("results", "spcoh_band", "sup", "ppt_nao_sup.rds"))
+# plotmag(spcoh.ppt.nao)
+png(here("results", "phase_dif", "sup", "ppt-nao_sup.png"))
 plotphase(spcoh.ppt.nao)
+dev.off()
+
 ##
 spcoh.ppt.pdo<-bandtest(spcoh.ppt.pdo, bshort)
 spcoh.ppt.pdo<-bandtest(spcoh.ppt.pdo, blong)
-plotmag(spcoh.ppt.pdo)
+spcoh.ppt.pdo.band <- get_bandp(spcoh.ppt.pdo)
+saveRDS(spcoh.ppt.pdo.band,file=here("results", "spcoh_band", "sup", "ppt_pdo_sup.rds"))
+# plotmag(spcoh.ppt.pdo)
+png(here("results", "phase_dif", "sup", "ppt-pdo_sup.png"))
 plotphase(spcoh.ppt.pdo)
+dev.off()
+
 ##
 spcoh.ppt.enso<-bandtest(spcoh.ppt.enso, bshort)
 spcoh.ppt.enso<-bandtest(spcoh.ppt.enso, blong)
-plotmag(spcoh.ppt.enso)
+spcoh.ppt.enso.band <- get_bandp(spcoh.ppt.enso)
+saveRDS(spcoh.ppt.enso.band,file=here("results", "spcoh_band", "sup", "ppt_enso_sup.rds"))
+# plotmag(spcoh.ppt.enso)
+png(here("results", "phase_dif", "sup", "ppt-enso_sup.png"))
 plotphase(spcoh.ppt.enso)
+dev.off()
